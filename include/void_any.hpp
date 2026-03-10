@@ -345,7 +345,7 @@ public:
 
 };
 
-inline void_any& null_any() 
+ inline void_any& null_any() 
 {
     static void_any instance;
     return instance;
