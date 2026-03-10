@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 4.0)
+
+project(main LANGUAGES CXX)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(main main.cpp)
+
+target_compile_options(main PRIVATE)
+
+if(WIN32)
+    add_custom_command(
+        TARGET main
+        PRE_BUILD
+        COMMAND taskkill /F /IM main.exe /T 2>nul || echo Process not running
+        COMMENT "Terminating mian.exe if it is running..."
+    )
+endif()
