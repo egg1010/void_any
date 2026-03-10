@@ -9,11 +9,22 @@ add_executable(main main.cpp)
 
 target_compile_options(main PRIVATE)
 
+add_executable(test test.cpp)
+
+target_compile_options(test PRIVATE)
+
+
 if(WIN32)
     add_custom_command(
         TARGET main
         PRE_BUILD
         COMMAND taskkill /F /IM main.exe /T 2>nul || echo Process not running
         COMMENT "Terminating mian.exe if it is running..."
+    )
+    add_custom_command(
+        TARGET test
+        PRE_BUILD
+        COMMAND taskkill /F /IM test.exe /T 2>nul || echo Process not running
+        COMMENT "Terminating test.exe if it is running..."
     )
 endif()
