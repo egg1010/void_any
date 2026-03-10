@@ -3,9 +3,15 @@
 #include "type_id.hpp"
 #include "void_any_config.hpp"
 #include <new>
-#include <windows.h>
 #include <type_traits>
-#include <cstddef> 
+#include <cstddef>
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <pthread.h>
+    #include <unistd.h>
+#endif
 
 
 
@@ -17,9 +23,25 @@ public:
         char dummy;
         const char* stack_addr = reinterpret_cast<const char*>(&dummy);
         
+#ifdef _WIN32
+
         ULONG_PTR stack_low, stack_high;
         GetCurrentThreadStackLimits(&stack_low, &stack_high);
         size_t remaining = static_cast<size_t>(stack_high - reinterpret_cast<ULONG_PTR>(stack_addr));
+#else
+
+        pthread_attr_t attr;
+        void* stack_base;
+        size_t stack_size;
+        
+        pthread_getattr_np(pthread_self(), &attr);
+        pthread_attr_getstack(&attr, &stack_base, &stack_size);
+        pthread_attr_destroy(&attr);
+        
+        const char* stack_top = static_cast<const char*>(stack_base) + stack_size;
+        size_t remaining = static_cast<size_t>(stack_top - stack_addr);
+#endif
+        
         return remaining > (required_size + 1024);
     }
 };
