@@ -5,21 +5,13 @@
 int main()
 {
     void_any a;
-    void_any b(123124,vao::Absolute_heap_memory);
+    void_any b(123124);
     a.set(std::string("hello world!"));
 
     //失败返回默认构造
     //Return default constructor on failure
     std::cout << b.get<int>() << std::endl;
 
-    if(b.get_memory_mode()==void_any_option::Absolute_heap_memory)
-    {
-        std::cout << "Absolute_heap_memory" << std::endl;
-    }
-    else
-    {
-        std::cout << "Enable_stack_memory" << std::endl;
-    }
 
     auto p=a.get_ptr<std::string>();
     if(p==nullptr)

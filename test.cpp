@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 #include "include/void_any.hpp"
-
+#include <windows.h>
 // 测试用的复杂类型
 struct ComplexType {
     int id;
@@ -62,7 +62,7 @@ bool test_basic_functionality() {
     }
     
     // 测试栈内存模式
-    void_any va3(123, vao::Enable_stack_memory);
+    void_any va3(123);
     if (va3.get<int>() != 123) {
         std::cerr << "栈内存模式测试失败！\n";
         return false;
@@ -108,7 +108,7 @@ bool test_million_level_stress() {
         std::cout << "正在测试栈内存模式（小对象）...\n";
         for (size_t i = 0; i < TEST_COUNT; ++i) {
             int small_value = static_cast<int>(i % 1000);
-            void_any va(small_value, vao::Enable_stack_memory);
+            void_any va(small_value);
             if (va.get<int>() != small_value) {
                 std::cerr << "栈内存模式测试在第 " << i << " 次迭代时失败！\n";
                 return false;
