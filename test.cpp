@@ -46,7 +46,6 @@ struct SimpleType {
 // 测试函数：基本功能测试
 bool test_basic_functionality() {
     std::cout << "正在测试基本功能...\n";
-    
     // 测试整数
     void_any va1(42);
     if (va1.get<int>() != 42) {
