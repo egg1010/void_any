@@ -4,22 +4,46 @@ project(main LANGUAGES CXX)
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Release模式优化选项
+if(MSVC)
+    # MSVC编译器优化选项
+    add_compile_options("$<$<CONFIG:Release>:/O2>")
+    add_compile_options("$<$<CONFIG:Release>:/GL>")
+    add_compile_options("$<$<CONFIG:Release>:/Oi>")
+    add_compile_options("$<$<CONFIG:Release>:/Ot>")
+    add_compile_options("$<$<CONFIG:Release>:/Oy>")
+    add_compile_options("$<$<CONFIG:Release>:/GT>")
+    add_compile_options("$<$<CONFIG:Release>:/arch:SSE2>")
+    
+    # 链接器优化
+    add_link_options("$<$<CONFIG:Release>:/LTCG>")
+    add_link_options("$<$<CONFIG:Release>:/OPT:REF>")
+    add_link_options("$<$<CONFIG:Release>:/OPT:ICF>")
+else()
+    # GCC/Clang编译器优化选项
+    add_compile_options("$<$<CONFIG:Release>:-O3>")
+    add_compile_options("$<$<CONFIG:Release>:-march=native>")
+    add_compile_options("$<$<CONFIG:Release>:-funroll-loops>")
+    add_compile_options("$<$<CONFIG:Release>:-fomit-frame-pointer>")
+    add_compile_options("$<$<CONFIG:Release>:-ffast-math>")
+    add_compile_options("$<$<CONFIG:Release>:-flto>")
+    
+    # 链接器优化
+    add_link_options("$<$<CONFIG:Release>:-flto>")
+endif()
 
 add_executable(main main.cpp)
 
-target_compile_options(main PRIVATE)
-
 add_executable(test test.cpp)
-
-target_compile_options(test PRIVATE)
-
 
 if(WIN32)
     add_custom_command(
         TARGET main
         PRE_BUILD
         COMMAND taskkill /F /IM main.exe /T 2>nul || echo Process not running
-        COMMENT "Terminating mian.exe if it is running..."
+        COMMENT "Terminating main.exe if it is running..."
     )
     add_custom_command(
         TARGET test
