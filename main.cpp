@@ -24,7 +24,7 @@ int main()
     }
 
 
-    std::cout << b.get_type_id() << std::endl;
-    std::cout << a.get_type_id() << std::endl;
+    std::cout << b.type_id() << std::endl;
+    std::cout << a.type_id() << std::endl;
 
 }

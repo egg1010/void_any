@@ -4,12 +4,12 @@
 class type_id
 {
 private:
-    id_allocation<int> type_id_allocator{};
+    inline static id_allocation<int> type_id_allocator{};
 public:
-    type_id()=default;
+    type_id() noexcept = default;
     
     template<typename T>
-    static int get_type_id()
+    [[nodiscard]] static int get_type_id() noexcept
     {
         static int id = type_id_allocator.get_id();
         return id;
